@@ -15,6 +15,13 @@ export function Counter(){
 
   // Store previous count
   const prevCountRef = useRef(null);
+  // history state
+  const [history, setHistory] = useState([count]);
+
+  // EFFECT 3: Add to history when count changes
+  useEffect(() => {
+    setHistory((prevHistory) => [...prevHistory, count]);
+  }, [count]);
 
   // EFFECT 2: Track previous value
   useEffect(() => {
@@ -65,12 +72,17 @@ export function Counter(){
   const toggleAuto = () => {
     setIsRunning((prev) => !prev);
   };
+  const historyCount = [prevCountRef.current]
+  historyCount.map(() => prevCountRef + 1)
+
   // Detect direction
   const direction =
     prevCountRef.current === null
       ? null
+
       : count > prevCountRef.current
       ? "up"
+
       : count < prevCountRef.current
       ? "down"
       : null;
@@ -85,8 +97,8 @@ export function Counter(){
       {direction === "down" && <p>⬇ Decreasing</p>}
 
       <div style={{ margin: 10 }}>
-        <button onClick={increment}>+</button>
-        <button onClick={decrement}>-</button>
+        <button onClick={increment}>Increment</button>
+        <button onClick={decrement}>Decrement</button>
         <button onClick={reset}>Reset</button>
       </div>
 
@@ -119,6 +131,11 @@ export function Counter(){
       </div>
 
       <p>Status: {isRunning ? "🟢 Running" : "🔴 Stopped"}</p>
+      <div>
+        <p>Count History</p>
+        <hr />
+        <p>{history.join()}</p>
+      </div>
     </div>
   );
 }
